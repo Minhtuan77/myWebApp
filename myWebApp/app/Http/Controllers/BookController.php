@@ -7,35 +7,46 @@ use App\Models\Book;
 
 class BookController extends Controller
 {
-    // Hiển thị danh sách sách
-    public function displayBook()
+    // READ - Hiển thị danh sách sách
+    public function index()
     {
         $books = Book::all();
-        return view('Book', compact('books'));
+        return view('books.index', compact('books'));
     }
 
-    // Hiển thị form chỉnh sửa
-    public function editBook(Request $request)
+    // CREATE - Hiển thị form thêm sách
+    public function create()
     {
-        $id = $request->id;
-        $book = Book::findOrFail($id);
-        return view('EditBook', compact('book'));
+        return view('books.create');
     }
 
-    // Lưu thông tin chỉnh sửa
-    public function saveBook(Request $request)
+    // CREATE - Lưu sách mới
+    public function store(Request $request)
     {
-        $id = $request->input('id');
-        $title = $request->input('title');
-        $author = $request->input('author');
+        Book::create($request->only(['title', 'author']));
+        return redirect()->route('books.index');
+    }
 
+    // UPDATE - Hiển thị form sửa sách
+    public function edit($id)
+    {
         $book = Book::findOrFail($id);
-        $book->update([
-            'title' => $title,
-            'author' => $author,
-        ]);
+        return view('books.edit', compact('book'));
+    }
 
-        $books = Book::all();
-        return view('Book', compact('books'));
+    // UPDATE - Lưu chỉnh sửa
+    public function update(Request $request, $id)
+    {
+        $book = Book::findOrFail($id);
+        $book->update($request->only(['title', 'author']));
+        return redirect()->route('books.index');
+    }
+
+    // DELETE - Xóa sách
+    public function destroy($id)
+    {
+        $book = Book::findOrFail($id);
+        $book->delete();
+        return redirect()->route('books.index');
     }
 }
