@@ -1,3 +1,6 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BookController;
 
 Route::get('/books', [BookController::class, 'index'])->name('books.index');   // Read
@@ -6,3 +9,4 @@ Route::post('/books', [BookController::class, 'store'])->name('books.store'); //
 Route::get('/books/{id}/edit', [BookController::class, 'edit'])->name('books.edit'); // Edit Form
 Route::post('/books/{id}', [BookController::class, 'update'])->name('books.update'); // Update
 Route::get('/books/{id}/delete', [BookController::class, 'destroy'])->name('books.destroy'); // Delete
+
